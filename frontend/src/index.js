@@ -14,7 +14,7 @@ import Axios from "axios";
 
 //-- Pages
 import Authentication from "./pages/Authentication";
-//import Home from "./pages/Application";
+import Home from "./pages/Home";
 import Logout from "./pages/Logout";
 import Smelasticache01 from "./pages/Sm-elasticache-01";
 
@@ -41,7 +41,8 @@ Axios.get(`/aws-exports.json`,).then((data)=>{
           <Authenticator.Provider>
               <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<ProtectedApp><Smelasticache01 /> </ProtectedApp>} />
+                    <Route path="/" element={<ProtectedApp><Home /> </ProtectedApp>} />
+                    <Route path="/elasticache/simple" element={<ProtectedApp><Smelasticache01 /> </ProtectedApp>} />
                     <Route path="/authentication" element={<Authentication />} />
                     <Route path="/logout" element={<ProtectedApp><Logout /> </ProtectedApp>} />
                 </Routes>

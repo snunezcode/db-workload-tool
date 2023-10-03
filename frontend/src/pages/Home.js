@@ -54,16 +54,17 @@ function Home() {
                                       </div>
                                       <br/>
                                       <div style={{"color": "white", "font-family": "arial,sans-serif", "font-size": "35px"}}>          
-                                        Gain Monitoring Insight and Take Action on AWS Database Resources.
+                                        Gain Real-Time Workload Insight and Take Action on AWS Database Resources.
                                       </div>
                                       <br/>
-                                      <Button variant="primary" href="/rds/instances/" >Get Started</Button>
+                                      <Button variant="primary" href="/elasticache/simple" >Get Started</Button>
                                       <br/>
                                       <br/>
                                       <div style={{"color": "white"}}>          
-                                        View performance data for AWS Database instances and clusters, so you can quickly identify and act on any issues that might impact database resources.
+                                        Perform Database Workloads on your AWS Database instances and clusters, so you can quickly simulate real world loads and visualize how your system respond on real time.
                                       </div>
                                       </>
+                                      
                                       
                                     }
                               
@@ -113,10 +114,10 @@ function Home() {
                             >
                                   <div>
                                     <Box variant="p">
-                                        Start connecting to your AWS RDS instances or Amazon Aurora, ElastiCache, MemoryDB, DocumentDB clusters.
+                                        Start performing database workloads for your AWS RDS instances or Amazon Aurora, ElastiCache, MemoryDB, DocumentDB clusters.
                                     </Box>
                                     <br/>
-                                    <Button variant="primary" href="/rds/instances/" >Get Started</Button>
+                                    <Button variant="primary" href="/elasticache/simple" >Get Started</Button>
                                     <br/>
                                     <br/>
                                   </div>

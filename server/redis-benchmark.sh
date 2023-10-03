@@ -10,4 +10,4 @@ THREADS=$7
 PIPELINE=$8
 PAYLOAD=$(expr ${ORIGINAL})
 
-stdbuf -o0 ./redis-benchmark -h ${REDIS_HOST} -p ${REDIS_PORT}  -c ${CLIENTS} -n ${REQUESTS} -r ${RANDOMIZE} -d ${PAYLOAD} -P ${PIPELINE} -t get,set -q --csv -l --cluster
+stdbuf -o0 redis6-benchmark -h ${REDIS_HOST} -p ${REDIS_PORT}  -c ${CLIENTS} -n ${REQUESTS} -r ${RANDOMIZE} -d ${PAYLOAD} -P ${PIPELINE} -t get,set -q --csv -l --cluster

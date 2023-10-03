@@ -4,6 +4,7 @@ version="$(curl https://version.code.ds.wwcs.aws.dev/?codeId=imwcp'&'moduleId=de
 #Install Software Packages
 sudo yum install -y openssl
 sudo yum install -y nginx
+sudo yum install -y redis6
 
 #Create Certificates
 sudo mkdir /etc/nginx/ssl/

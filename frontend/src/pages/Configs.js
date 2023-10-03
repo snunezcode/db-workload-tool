@@ -16,7 +16,7 @@ export const configuration =
         "refresh-interval": 5*1000,
         "api-url": "",
         "release" : "0.1.0",
-        "application-title": "AWS ElasticCache - Workload Comparation Tool",
+        "application-title": " Real-time Database Workload Tool",
         "socket-url": wsProtocol + "://" + domain + ":3003",
     },
     "colors": {
@@ -43,13 +43,13 @@ export const SideMainLayoutHeader = { text: 'Workload Models', href: '#/' };
 
 export const SideMainLayoutMenu = [
     {
-      text: 'Resources',
+      text: 'ElastiCache for Redis',
       type: 'section',
       defaultExpanded: true,
       items: [
-          { type: "link", text: "Simple Model", href: "/?codeid=dt01" },
-          { type: "link", text: "Complex Model", href: "/?codeid=dt02" },
-          { type: "link", text: "Settings", href: "/?codeid=dt01" },
+          { type: "link", text: "Simple Model", href: "/elasticache/simple" },
+          { type: "link", text: "Complex Model", href: "#" },
+          { type: "link", text: "Settings", href: "#" },
       ],
     },
     { type: "divider" },
