@@ -7,9 +7,17 @@ function ChartDonut({series, labels, height, width="100%", title, }) {
               chart: {
                 type: 'donut',
                 height: height,
+                foreColor: '#9e9b9a',
+                animations: {
+                    enabled: true,
+                },
               },
               legend: {
                 position: 'bottom'
+              },
+              stroke: {
+                  show: false,
+                  width:0
               },
               responsive: [{
                 breakpoint: 480,

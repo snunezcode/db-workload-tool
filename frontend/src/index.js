@@ -23,6 +23,19 @@ import Smelasticache01 from "./pages/Sm-elasticache-01";
 //-- Components
 import ProtectedApp from "./components/ProtectedApp";
 
+import { applyMode,  Mode } from '@cloudscape-design/global-styles';
+
+if (localStorage.getItem("themeMode") === null ){
+    localStorage.setItem("themeMode", "dark");
+}
+
+if (localStorage.getItem("themeMode") == "dark")
+    applyMode(Mode.Dark);
+else
+    applyMode(Mode.Light);
+    
+
+
 Axios.get(`/aws-exports.json`,).then((data)=>{
 
     var configData = data.data;

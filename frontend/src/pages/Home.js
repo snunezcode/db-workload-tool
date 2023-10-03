@@ -54,14 +54,14 @@ function Home() {
                                       </div>
                                       <br/>
                                       <div style={{"color": "white", "font-family": "arial,sans-serif", "font-size": "35px"}}>          
-                                        Gain Real-Time Workload Insight and Take Action on AWS Database Resources.
+                                        Perform Real-Time Workload Testing on AWS Database Resources.
                                       </div>
                                       <br/>
                                       <Button variant="primary" href="/elasticache/simple" >Get Started</Button>
                                       <br/>
                                       <br/>
                                       <div style={{"color": "white"}}>          
-                                        Perform Database Workloads on your AWS Database instances and clusters, so you can quickly simulate real world loads and visualize how your system respond on real time.
+                                        Generate Real-Time Database Workloads on your AWS Database instances and clusters, so you can quickly simulate real world loads and visualize how your system respond.
                                       </div>
                                       </>
                                       
@@ -88,16 +88,16 @@ function Home() {
                                 }
                             >
                                   <div>
-                                            <Badge>1</Badge> Connect to your AWS Database resorces.
+                                            <Badge>1</Badge> Select database resources for workload testing
                                             <br/>
                                             <br/>
-                                            <Badge>2</Badge> Gather realtime performance database metrics from engine itself.
+                                            <Badge>2</Badge> Setup workload scenario
                                             <br/>
                                             <br/>
-                                            <Badge>3</Badge> Extract performance from AWS Cloudwatch metrics and Enhanced Monitoring.
+                                            <Badge>3</Badge> Start workload testing
                                             <br/>
                                             <br/>
-                                            <Badge>4</Badge> Consolidate all information into centralized dashboard.
+                                            <Badge>4</Badge> Visualize on real-time workload metrics
                                   </div>
                         </Container>
                         
@@ -139,26 +139,26 @@ function Home() {
                                <ColumnLayout columns={1} variant="text-grid">
                                     <div>
                                       <Header variant="h3">
-                                        Monitor instance performance
+                                        Compare Database Architectures
                                       </Header>
                                       <Box variant="p">
-                                        Visualize performance data on realtime, and correlate data to understand and resolve the root cause of performance issues in your database resources.
+                                        Perform workload testing to compare database architectures, different instance sizes or number of nodes.
                                       </Box>
                                     </div>
                                     <div>
                                       <Header variant="h3">
-                                        Perform root cause analysis
+                                        Compare Database Versions
                                       </Header>
                                       <Box variant="p">
-                                        Analyze database and operating system metrics to speed up debugging and reduce overall mean time to resolution.
+                                        Perform workload testing to compare database versions, minor or major releases.
                                       </Box>
                                     </div>
                                     <div>
                                       <Header variant="h3">
-                                        Optimize resources proactively
+                                        Compare Database Configurations
                                       </Header>
                                       <Box variant="p">
-                                        Identify top consumer sessions, gather database statements and resource usages.
+                                        Perform workload testing to compare configurations parameters and database settings.
                                       </Box>
                                     </div>
                                     

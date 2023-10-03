@@ -1,19 +1,25 @@
 import TopNavigation from '@cloudscape-design/components/top-navigation';
 import { Authenticator } from "@aws-amplify/ui-react";
 import { configuration } from '../pages/Configs';
+import { applyMode, Mode } from '@cloudscape-design/global-styles';
 
 export default function App() {
 
     const handleClickMenu = ({detail}) => {
-        
+            console.log(detail);
+            
             switch (detail.id) {
               
-              case 'opt1':
+              case 'themeDark':
+                  applyMode(Mode.Dark);
+                  localStorage.setItem("themeMode", "dark");
+                  break;
+                
+              case 'themeLight':
+                    applyMode(Mode.Light);
+                    localStorage.setItem("themeMode", "light");
                     break;
-              
-              case 'opt2':
-                    break;
-              
+                
               
             }
 
@@ -36,7 +42,8 @@ export default function App() {
         id: 'preferences',
         text: 'Preferences',
         items: [
-          { type: 'button', id: 'Settings', text: 'Settings' }
+          { type: 'button', id: 'themeDark', text: 'Theme Dark' },
+          { type: 'button', id: 'themeLight', text: 'Theme Light'},
         ]
       },
       {

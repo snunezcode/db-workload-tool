@@ -16,7 +16,7 @@ export const configuration =
         "refresh-interval": 5*1000,
         "api-url": "",
         "release" : "0.1.0",
-        "application-title": " Real-time Database Workload Tool",
+        "application-title": " Real-time Database Workload Solution",
         "socket-url": wsProtocol + "://" + domain + ":3003",
     },
     "colors": {
@@ -33,13 +33,7 @@ export const configuration =
     
 };
 
-export const modulesInfo = {
-    "default" : { title: 'Demo Data Types', description: 'This demo show how use data types.' },
-    "dt01" : { title: 'Counter Type', description: 'This demo show how use incremental values types.' },
-    "dt02" : { title: 'LeaderBoard', description: 'This demo show how use leader board values types.' }
-};
-
-export const SideMainLayoutHeader = { text: 'Workload Models', href: '#/' };
+export const SideMainLayoutHeader = { text: 'Workload Models', href: '/' };
 
 export const SideMainLayoutMenu = [
     {
@@ -56,7 +50,7 @@ export const SideMainLayoutMenu = [
     {
           type: "link",
           text: "Documentation",
-          href: "https://github.com/rlunar/redis-tool-box",
+          href: "https://github.com/snunezcode/db-workload-tool/",
           external: true,
           externalIconAriaLabel: "Opens in a new tab"
     }
