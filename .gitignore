@@ -1,3 +1,8 @@
+conf/run.sh
+server/archive/
+frontend/public/aws-exports.json
+server/exports.json
+
 # Logs
 logs
 *.log
