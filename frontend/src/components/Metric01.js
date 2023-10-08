@@ -1,11 +1,7 @@
-import {useState,useEffect} from 'react'
-import * as awsui from '@cloudscape-design/design-tokens';
-import Link from "@cloudscape-design/components/link";
+import {useState,useEffect,memo} from 'react'
 
-
-
-function Metric({ value, title, precision, format=1, fontSizeTitle = "11px", fontSizeValue = "22px", fontColorTitle = "#C6C2C1", fontColorValue = "orange" }) {
-
+const Metric = memo(({ value, title, precision, format=1, fontSizeTitle = "11px", fontSizeValue = "22px", fontColorTitle = "#C6C2C1", fontColorValue = "orange"}) => {
+    
     const [counterValue,setCountervalue] = useState(0);
     
     function updateMetrics(){
@@ -78,7 +74,7 @@ function Metric({ value, title, precision, format=1, fontSizeTitle = "11px", fon
                 </span>
           
             </div>
-           )
-}
+    )
+});
 
-export default Metric
+export default Metric;

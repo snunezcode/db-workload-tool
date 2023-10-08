@@ -26,9 +26,14 @@ export const configuration =
             "metric100" : "#e59400",
         },
         "lines" : {
-            "separator100" : "#737c85"
+            "separator100" : "#737c85",
+            "separator101" : "#e7eaea",
             
         }
+    },
+    "ui": {
+        "library" : "@awsui/components-react/",
+        "library-passive" : "@cloudscape-design/components/",
     }
     
 };
@@ -41,8 +46,8 @@ export const SideMainLayoutMenu = [
       type: 'section',
       defaultExpanded: true,
       items: [
-          { type: "link", text: "Simple Model", href: "/elasticache/simple" },
-          { type: "link", text: "Complex Model", href: "#" },
+          { type: "link", text: "Single Model", href: "/elasticache/single" },
+          { type: "link", text: "SideBySide Model", href: "/elasticache/side-by-side" },
           { type: "link", text: "Settings", href: "#" },
       ],
     },

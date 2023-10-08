@@ -2,77 +2,45 @@ import {useState,useEffect} from 'react'
 
 import { SideMainLayoutHeader,SideMainLayoutMenu, breadCrumbs } from './Configs';
 
-import CustomHeader from "../components/HeaderApp";
-import AppLayout from "@cloudscape-design/components/app-layout";
-import SideNavigation from '@cloudscape-design/components/side-navigation';
-import ContentLayout from '@cloudscape-design/components/content-layout';
+import CustomHeader from "../components/Header";
+import ContentLayout from '@awsui/components-react/content-layout';
 import { configuration } from './Configs';
 
-import Button from "@cloudscape-design/components/button";
-import Container from "@cloudscape-design/components/container";
-import Header from "@cloudscape-design/components/header";
-import Box from "@cloudscape-design/components/box";
-import ColumnLayout from "@cloudscape-design/components/column-layout";
-import Badge from "@cloudscape-design/components/badge";
+import Button from "@awsui/components-react/button";
+import Container from "@awsui/components-react/container";
+import Header from "@awsui/components-react/header";
+import Box from "@awsui/components-react/box";
+import ColumnLayout from "@awsui/components-react/column-layout";
+import Badge from "@awsui/components-react/badge";
 
 import '@aws-amplify/ui-react/styles.css';
-
-export const splitPanelI18nStrings: SplitPanelProps.I18nStrings = {
-  preferencesTitle: 'Split panel preferences',
-  preferencesPositionLabel: 'Split panel position',
-  preferencesPositionDescription: 'Choose the default split panel position for the service.',
-  preferencesPositionSide: 'Side',
-  preferencesPositionBottom: 'Bottom',
-  preferencesConfirm: 'Confirm',
-  preferencesCancel: 'Cancel',
-  closeButtonAriaLabel: 'Close panel',
-  openButtonAriaLabel: 'Open panel',
-  resizeHandleAriaLabel: 'Resize split panel',
-};
 
 
 function Home() {
   
   return (
       
-    <div style={{"background-color": "#f2f3f3"}}>
-      <CustomHeader/>
-      <AppLayout
-          navigationOpen={false}
-          breadCrumbs={breadCrumbs}
-          navigation={<SideNavigation items={SideMainLayoutMenu} header={SideMainLayoutHeader} activeHref={"/"} />}
-          contentType="table"
-          content={
-              <ContentLayout 
+    <div>
+      <CustomHeader
+            activeHref={"/#"}
+            content={
+            
+            
+            <ContentLayout 
                     header = {
-                            <Header variant="h2"
-                                    description={
-                                      <>
-                                      <br/>
-                                      <div style={{"color": "white", "font-family": "arial,sans-serif", "font-size": "20px"}}>          
-                                        Welcome to {configuration["apps-settings"]["application-title"]}
-                                      </div>
-                                      <br/>
-                                      <div style={{"color": "white", "font-family": "arial,sans-serif", "font-size": "35px"}}>          
-                                        Perform Real-Time Workload Testing on AWS Database Resources.
-                                      </div>
-                                      <br/>
-                                      <Button variant="primary" href="/elasticache/simple" >Get Started</Button>
-                                      <br/>
-                                      <br/>
-                                      <div style={{"color": "white"}}>          
-                                        Generate Real-Time Database Workloads on your AWS Database instances and clusters, so you can quickly simulate real world loads and visualize how your system respond.
-                                      </div>
-                                      </>
-                                      
-                                      
-                                    }
+                             <>
+                                <Header variant="h1">
+                                            Welcome to {configuration["apps-settings"]["application-title"]}
+                                </Header>
+                                <Box fontSize="heading-s">
+                                    Generate Real-Time Database Workloads on your AWS Database instances and clusters, so you can quickly simulate real world loads and visualize how your system respond.
+                                </Box>
+                                <br/>
+                            </>
                               
-                            >
                               
-                            </Header>
-                            
                           }
+                          
               >
             
               <div>
@@ -117,7 +85,7 @@ function Home() {
                                         Start performing database workloads for your AWS RDS instances or Amazon Aurora, ElastiCache, MemoryDB, DocumentDB clusters.
                                     </Box>
                                     <br/>
-                                    <Button variant="primary" href="/elasticache/simple" >Get Started</Button>
+                                    <Button variant="primary" href="/elasticache/single" >Get Started</Button>
                                     <br/>
                                     <br/>
                                   </div>
@@ -169,11 +137,12 @@ function Home() {
                     
                 </div>
                 </ContentLayout>
-              
-          }
+            
+            
+            }
         />
-        
     </div>
+    
   );
 }
 

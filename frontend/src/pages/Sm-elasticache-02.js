@@ -114,6 +114,7 @@ function Application() {
         
             var api_url = configuration["apps-settings"]["api-url"];
             var serverConnection1 = {};
+            var serverConnection2 = {};
             var commandOptions = {};
             var workloadOperationTypes = ""
             
@@ -145,6 +146,27 @@ function Application() {
             }
             
             
+            if (customCluster2){
+                
+                serverConnection2 = {
+                                id : customAlias2,
+                                host :  customHost2, 
+                                port : customPort2
+                    
+                };
+                
+            }
+            else
+            {
+                
+                serverConnection2 = {
+                                id : selectedCluster2['value'],
+                                host :  selectedCluster2['host'], 
+                                port : selectedCluster2['port']
+                    
+                };
+                
+            }
             
             if (customSettings == true){
                 
@@ -181,12 +203,20 @@ function Application() {
                                         customCommand : customCommand,
                                         customSettings : customSettings,
                                         clusterMode : clusterMode
+                                    },
+                        
+                            srv02 : {
+                                        ...serverConnection2,
+                                        ...commandOptions,
+                                        customCommand : customCommand,
+                                        customSettings : customSettings,
+                                        clusterMode : clusterMode
                                     }
             };
         
             console.log(params);
             
-            Axios.get(`${api_url}/api/workload/redis/start/model/2/`,{
+            Axios.get(`${api_url}/api/workload/redis/start/model/1/`,{
                       params: params, 
                   }).then((data)=>{
                    workloadStarted.current = true;
@@ -195,7 +225,7 @@ function Application() {
                      
               })
               .catch((err) => {
-                  console.log('Timeout API Call : /api/workload/redis/start/model/2/' );
+                  console.log('Timeout API Call : /api/workload/redis/start/model/1/' );
                   console.log(err);
                   
               });
@@ -204,7 +234,7 @@ function Application() {
         }
         catch{
         
-          console.log('Timeout API error : /api/workload/redis/start/model/2/');                  
+          console.log('Timeout API error : /api/workload/redis/start/model/1/');                  
           
         }
        
@@ -220,17 +250,17 @@ function Application() {
             var api_url = configuration["apps-settings"]["api-url"];
             
         
-            Axios.get(`${api_url}/api/workload/redis/stop/model/2/`).then((data)=>{
+            Axios.get(`${api_url}/api/workload/redis/stop/model/1/`).then((data)=>{
                    console.log(data);
               })
               .catch((err) => {
-                  console.log('Timeout API Call : /api/workload/redis/stop/model/2/' );
+                  console.log('Timeout API Call : /api/workload/redis/stop/model/1/' );
                   console.log(err);
               });
         }
         catch{
         
-          console.log('Timeout API error : /api/workload/redis/stop/model/2/');                  
+          console.log('Timeout API error : /api/workload/redis/stop/model/1/');                  
           
         }
         
@@ -279,7 +309,7 @@ function Application() {
         
             var api_url = configuration["apps-settings"]["api-url"];
         
-            Axios.get(`${api_url}/api/workload/redis/status/model/2/`).then((data)=>{
+            Axios.get(`${api_url}/api/workload/redis/status/model/1/`).then((data)=>{
                    
                    
                    workloadStarted.current = data.data.status.workloadStarted;
@@ -289,7 +319,7 @@ function Application() {
                            
               })
               .catch((err) => {
-                  console.log('Timeout API Call : /api/workload/redis/status/model/2/' );
+                  console.log('Timeout API Call : /api/workload/redis/status/model/1/' );
                   console.log(err);
                   
               });
@@ -297,7 +327,7 @@ function Application() {
         }
         catch{
         
-          console.log('Timeout API error : /api/workload/redis/status/model/2/');                  
+          console.log('Timeout API error : /api/workload/redis/status/model/1/');                  
           
         }
         
@@ -406,7 +436,7 @@ function Application() {
   return (
     <div>
         <CustomHeader
-            activeHref={"/elasticache/single"}
+            activeHref={"/elasticache/side-by-side"}
             content={
                 
                 <>
@@ -415,9 +445,9 @@ function Application() {
                                     header={
                                         <Header
                                           variant="h2"
-                                          description={"Model to perform workload testing for Amazon ElastiCache Clusters or another Redis engine using redis-benchmark tool."}
+                                          description={"Model to compare two Amazon ElastiCache Clusters or another Redis engine using redis-benchmark tool."}
                                         >
-                                          Single Workload Model
+                                          SideBySide Comparation Model
                                         </Header>
                                       }
                                 >
@@ -425,8 +455,8 @@ function Application() {
                                         
                                         <ColumnLayout columns={2}>
                                             <FormField
-                                                label="Cluster"
-                                                description="Select cluster for workload testing"
+                                                label="Cluster-1"
+                                                description="Enter the first cluster for comparation process"
                                                 stretch={true}
                                               >
                                                     
@@ -514,7 +544,96 @@ function Application() {
                                                     </Checkbox>
                                                     
                                             </FormField>
-                                        
+                                            <FormField
+                                                label="Cluster-2"
+                                                description="Enter the second cluster for comparation process"
+                                                stretch={true}
+                                              >
+                                                    
+                                                    { customCluster2 === false &&
+                                                        <table style={{"width":"100%"}}>
+                                                            <tr> 
+                                                                <td style={{"width":"100%"}}>
+                                                                    <Select
+                                                                            disabled={(workloadStarted.current)}
+                                                                            selectedOption={selectedCluster2}
+                                                                            onChange={({ detail }) => {
+                                                                                    setSelectedCluster2(detail.selectedOption)
+                                                                                    }
+                                                                                }
+                                                                            options={optionCluster2.current}
+                                                                    />
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    }
+                                                    { customCluster2 === true &&
+                                                        <table style={{"width":"100%"}}>
+                                                            <tr> 
+                                                                <td style={{"width":"10%"}}>
+                                                                    <FormField
+                                                                        stretch={true}
+                                                                    >
+                                                                        
+                                                                        <Input
+                                                                          disabled={(workloadStarted.current)}
+                                                                          onChange={({ detail }) => setCustomAlias2(detail.value)}
+                                                                          value={customAlias2}
+                                                                          placeholder="Alias"
+                                                                        />
+                                                                        
+                                                                    </FormField>
+                                                                
+                                                                    
+                                                                </td>   
+                                                                <td style={{"width":"65%"}}>
+                                                                    <FormField
+                                                                        stretch={true}
+                                                                    >
+                                                                        
+                                                                        <Input
+                                                                          disabled={(workloadStarted.current)}
+                                                                          onChange={({ detail }) => setCustomHost2(detail.value)}
+                                                                          value={customHost2}
+                                                                          placeholder="host"
+                                                                        />
+                                                                        
+                                                                    </FormField>
+                                                                
+                                                                    
+                                                                </td>   
+                                                                <td style={{"width":"25%"}}>
+                                                                    <FormField
+                                                                        stretch={true}
+                                                                    >
+                                                                        
+                                                                        <Input
+                                                                          disabled={(workloadStarted.current)}
+                                                                          onChange={({ detail }) => setCustomPort2(detail.value)}
+                                                                          value={customPort2}
+                                                                          placeholder="port"
+                                                                        />
+                                                                        
+                                                                    </FormField>
+                                                                    
+                                                                    
+                                                                </td>   
+                                                            </tr>
+                                                        </table>
+                                                    }
+                                                    
+                                                    <br/>
+                                                    <Checkbox
+                                                      onChange={({ detail }) =>
+                                                        setCustomCluster2(detail.checked)
+                                                      }
+                                                      checked={customCluster2}
+                                                      disabled={(workloadStarted.current)}
+                                                    >
+                                                      Custom Connection
+                                                    </Checkbox>
+                                                    
+                                            </FormField>
                                         </ColumnLayout>
                                         <br/>            
         
@@ -748,58 +867,102 @@ function Application() {
                                     <hr color={configuration.colors.lines.separator101}/>
                                     <table style={{"width":"100%"}}>
                                         <tr> 
-                                            <td style={{"width":"15%", "padding-left": "0em"}}>  
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
                                                 <Box variant="h4">Summary</Box>
                                             </td>
                                         </tr>
                                     </table>
                                     <table style={{"width":"100%"}}>
                                         <tr> 
-                                            <td style={{"width":"35%", "padding-left": "3em", "border-left": "5px solid " + configuration.colors.lines.separator101}}>  
+                                            <td style={{"width":"20%", "padding-left": "1em"}}>  
+                                                <ChartDonut01 series={JSON.stringify([ 
+                                                                           ( statMetrics[0][selectedOperationMetric['value']]['rpsTotal'] || 0),
+                                                                           ( statMetrics[1][selectedOperationMetric['value']]['rpsTotal'] || 0), 
+                                                                    ])} 
+                                                                    labels={JSON.stringify([statMetrics[0]['name'],statMetrics[1]['name']])}
+                                                                    height="250px" 
+                                                                    width="250px" 
+                                                                    title={"Total Requests"}
+                                                />
+                                            </td>
+                                            <td style={{"width":"40%", "padding-left": "1em", "border-left": "1px solid " + configuration.colors.lines.separator101}}>  
                                                     <Box variant="h1">{statMetrics[0]['name']}</Box>
+                                                    <Box color="text-body-secondary">Cluster</Box>
+                                                    <br/>
                                                     <br/>
                                                     <table style={{"width":"100%"}}>
                                                         <tr> 
-                                                            <td style={{"width":"25%", "padding-left": "1em"}}>  
+                                                            <td style={{"width":"33%", "padding-left": "0em", }}>  
                                                                 <CompMetric01 
-                                                                    value={ ( statMetrics[0][selectedOperationMetric['value']]['rpsTotal'] / statMetrics[0][selectedOperationMetric['value']]['eventsTotal'] ) || 0}
+                                                                    value={ ( statMetrics[0][selectedOperationMetric['value']]['rpsTotal'] / statMetrics[0][selectedOperationMetric['value']]['eventsTotal']) || 0}
                                                                     title={"Requests/sec"}
                                                                     precision={0}
                                                                     format={3}
                                                                     fontColorValue={configuration.colors.fonts.metric100}
-                                                                    fontSizeValue={"24px"}
+                                                                    fontSizeValue={"20px"}
                                                                />
                                                             </td>
-                                                            <td style={{"width":"25%", "padding-left": "1em"}}>  
-                                                                <CompMetric01 
-                                                                    value={ ( statMetrics[0][selectedOperationMetric['value']]['avgTotal'] / statMetrics[0][selectedOperationMetric['value']]['eventsTotal'] ) || 0}
-                                                                    title={"Latency Average(ms)"}
-                                                                    precision={3}
-                                                                    format={1}
-                                                                    fontColorValue={configuration.colors.fonts.metric100}
-                                                                    fontSizeValue={"24px"}
-                                                               />
-                                                            </td>
-                                                            <td style={{"width":"25%", "padding-left": "0em", }}>  
+                                                            <td style={{"width":"33%", "padding-left": "0em", }}>  
                                                                 <CompMetric01 
                                                                     value={ statMetrics[0][selectedOperationMetric['value']]['rpsTotal'] || 0}
                                                                     title={"Total Requests"}
                                                                     precision={0}
                                                                     format={3}
                                                                     fontColorValue={configuration.colors.fonts.metric100}
-                                                                    fontSizeValue={"24px"}
+                                                                    fontSizeValue={"20px"}
                                                                />
                                                             </td>
-                                                            <td style={{"width":"25%", "padding-left": "1em"}}>  
+                                                            <td style={{"width":"33%", "padding-left": "0em"}}>  
                                                                 <CompMetric01 
                                                                     value={ statMetrics[0][selectedOperationMetric['value']]['eventsTotal'] || 0}
                                                                     title={"Total Events"}
                                                                     precision={0}
                                                                     format={3}
                                                                     fontColorValue={configuration.colors.fonts.metric100}
-                                                                    fontSizeValue={"24px"}
+                                                                    fontSizeValue={"20px"}
                                                                />
                                                             </td>
+                                                        </tr>
+                                                    </table>
+                                            </td>
+                                            <td style={{"width":"40%", "padding-left": "1em", "border-left": "1px solid " + configuration.colors.lines.separator101}}>  
+                                                    <Box variant="h1">{statMetrics[1]['name']}</Box>
+                                                    <Box color="text-body-secondary">Cluster</Box>
+                                                    <br/>
+                                                    <br/>
+                                                    <table style={{"width":"100%"}}>
+                                                        <tr> 
+                                                            <td style={{"width":"33%", "padding-left": "0em", }}>  
+                                                                <CompMetric01 
+                                                                    value={ ( statMetrics[1][selectedOperationMetric['value']]['rpsTotal'] / statMetrics[1][selectedOperationMetric['value']]['eventsTotal']) || 0}
+                                                                    title={"Requests/sec"}
+                                                                    precision={0}
+                                                                    format={3}
+                                                                    fontColorValue={configuration.colors.fonts.metric100}
+                                                                    fontSizeValue={"20px"}
+                                                               />
+                                                            </td>
+                                                            <td style={{"width":"33%", "padding-left": "0em"}}>  
+                                                                <CompMetric01 
+                                                                    value={ statMetrics[1][selectedOperationMetric['value']]['rpsTotal'] || 0}
+                                                                    title={"Total Requests"}
+                                                                    precision={0}
+                                                                    format={3}
+                                                                    fontColorValue={configuration.colors.fonts.metric100}
+                                                                    fontSizeValue={"20px"}
+                                                               />
+                                                            </td>
+                                                            <td style={{"width":"33%", "padding-left": "0em"}}>  
+                                                                <CompMetric01 
+                                                                    value={ statMetrics[1][selectedOperationMetric['value']]['eventsTotal'] || 0}
+                                                                    title={"Total Events"}
+                                                                    precision={0}
+                                                                    format={3}
+                                                                    fontColorValue={configuration.colors.fonts.metric100}
+                                                                    fontSizeValue={"20px"}
+                                                               />
+                                                            </td>
+                                                            
                                                         </tr>
                                                     </table>
                                             </td>
@@ -811,223 +974,385 @@ function Application() {
                                     <hr color={configuration.colors.lines.separator101}/>
                                     <table style={{"width":"100%"}}>
                                         <tr> 
-                                            <td style={{"width":"15%", "padding-left": "0em"}}>  
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
                                                 <Box variant="h4">Requests/sec</Box>
                                             </td>
                                         </tr>
                                     </table>
                                     <table style={{"width":"100%"}}>
                                         <tr> 
-                                            <td style={{"width":"20%", "padding-left": "4em", "border-left": "5px solid " + configuration.colors.lines.separator101 }}>  
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
                                                     <CompMetric01 
                                                         value={ statMetrics[0][selectedOperationMetric['value']]['rps'][statMetrics[0][selectedOperationMetric['value']]['rps'].length-1] || 0}
-                                                        title={"Count/sec"}
+                                                        title={statMetrics[0]['name']}
                                                         precision={0}
                                                         format={3}
                                                         fontColorValue={configuration.colors.fonts.metric100}
                                                         fontSizeValue={"24px"}
                                                     />
                                             </td>
-                                            <td style={{"width":"80%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
+                                                    <CompMetric01 
+                                                        value={ statMetrics[1][selectedOperationMetric['value']]['rps'][statMetrics[1][selectedOperationMetric['value']]['rps'].length-1] || 0}
+                                                        title={statMetrics[1]['name']}
+                                                        precision={0}
+                                                        format={3}
+                                                        fontColorValue={configuration.colors.fonts.metric100}
+                                                        fontSizeValue={"24px"}
+                                                    />
+                                            </td>
+                                            <td style={{"width":"20%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
+                                                 <ChartDonut01 series={JSON.stringify([
+                                                                           (statMetrics[0][selectedOperationMetric['value']]['rps'][statMetrics[0][selectedOperationMetric['value']]['rps'].length-1] || 0) ,     
+                                                                           (statMetrics[1][selectedOperationMetric['value']]['rps'][statMetrics[1][selectedOperationMetric['value']]['rps'].length-1] || 0) ,     
+                                                                    ])} 
+                                                                    labels={JSON.stringify([statMetrics[0]['name'],statMetrics[1]['name']])}
+                                                                    height="280px" 
+                                                                    width="280px" 
+                                                />
+                                            </td>
+                                            <td style={{"width":"50%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
                                                 <ChartLine01 series={JSON.stringify([
-                                                                            { name : statMetrics[0]['name'], data :  statMetrics[0][selectedOperationMetric['value']]['rps'] }
+                                                                            { name : statMetrics[0]['name'], data :  statMetrics[0][selectedOperationMetric['value']]['rps'] },
+                                                                            { name : statMetrics[1]['name'],data :  statMetrics[1][selectedOperationMetric['value']]['rps'] }
                                                                             
                                                                     ])} 
-                                                title={"Count/sec"} height="180px" />
+                                                title={"Requests/sec"} height="180px" />
                                             </td>
                                         </tr>
-                                    </table>
-                                    
+                                    </table> 
                                     
                                     <br/>
                                     <hr color={configuration.colors.lines.separator101}/>
                                     <table style={{"width":"100%"}}>
                                         <tr> 
-                                            <td style={{"width":"15%", "padding-left": "0em"}}>  
-                                                <Box variant="h4">Latency - Average</Box>
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
+                                                <Box variant="h4">Latency Average (ms)</Box>
                                             </td>
                                         </tr>
                                     </table>
                                     <table style={{"width":"100%"}}>
                                         <tr> 
-                                            <td style={{"width":"20%", "padding-left": "4em", "border-left": "5px solid " + configuration.colors.lines.separator101 }}>  
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
                                                     <CompMetric01 
                                                         value={ statMetrics[0][selectedOperationMetric['value']]['avg_latency_ms'][statMetrics[0][selectedOperationMetric['value']]['avg_latency_ms'].length-1] || 0}
-                                                        title={"Latency(ms)"}
+                                                        title={statMetrics[0]['name']}
                                                         precision={3}
                                                         format={1}
                                                         fontColorValue={configuration.colors.fonts.metric100}
                                                         fontSizeValue={"24px"}
                                                     />
                                             </td>
-                                            <td style={{"width":"80%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
-                                                <ChartLine01 series={JSON.stringify([
-                                                                            { name : statMetrics[0]['name'], data :  statMetrics[0][selectedOperationMetric['value']]['avg_latency_ms'] }
-                                                                            
-                                                                    ])} 
-                                                title={"Latency(ms)"} height="180px" />
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    
-                                    <br/>
-                                    <hr color={configuration.colors.lines.separator101}/>
-                                    <table style={{"width":"100%"}}>
-                                        <tr> 
-                                            <td style={{"width":"15%", "padding-left": "0em"}}>  
-                                                <Box variant="h4">Latency - Maximum</Box>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <table style={{"width":"100%"}}>
-                                        <tr> 
-                                            <td style={{"width":"20%", "padding-left": "4em", "border-left": "5px solid " + configuration.colors.lines.separator101 }}>  
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
                                                     <CompMetric01 
-                                                        value={ statMetrics[0][selectedOperationMetric['value']]['max_latency_ms'][statMetrics[0][selectedOperationMetric['value']]['max_latency_ms'].length-1] || 0}
-                                                        title={"Latency(ms)"}
+                                                        value={ statMetrics[1][selectedOperationMetric['value']]['avg_latency_ms'][statMetrics[1][selectedOperationMetric['value']]['avg_latency_ms'].length-1] || 0}
+                                                        title={statMetrics[1]['name']}
                                                         precision={3}
                                                         format={1}
                                                         fontColorValue={configuration.colors.fonts.metric100}
                                                         fontSizeValue={"24px"}
                                                     />
                                             </td>
-                                            <td style={{"width":"80%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
+                                            <td style={{"width":"20%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
+                                                 <ChartDonut01 series={JSON.stringify([
+                                                                           (statMetrics[0][selectedOperationMetric['value']]['avg_latency_ms'][statMetrics[0][selectedOperationMetric['value']]['avg_latency_ms'].length-1] || 0) ,     
+                                                                           (statMetrics[1][selectedOperationMetric['value']]['avg_latency_ms'][statMetrics[1][selectedOperationMetric['value']]['avg_latency_ms'].length-1] || 0) ,     
+                                                                    ])} 
+                                                                    labels={JSON.stringify([statMetrics[0]['name'],statMetrics[1]['name']])}
+                                                                    height="280px" 
+                                                                    width="280px" 
+                                                />
+                                            </td>
+                                            <td style={{"width":"50%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
                                                 <ChartLine01 series={JSON.stringify([
-                                                                            { name : statMetrics[0]['name'], data :  statMetrics[0][selectedOperationMetric['value']]['max_latency_ms'] }
+                                                                            { name : statMetrics[0]['name'], data :  statMetrics[0][selectedOperationMetric['value']]['avg_latency_ms'] },
+                                                                            { name : statMetrics[1]['name'],data :  statMetrics[1][selectedOperationMetric['value']]['avg_latency_ms'] }
                                                                             
                                                                     ])} 
-                                                title={"Latency(ms)"} height="180px" />
+                                                title={"Latency (ms)"} height="180px" />
                                             </td>
                                         </tr>
-                                    </table>         
+                                    </table>
+                                    
+                                    
+                                    
                                     
                                     <br/>
                                     <hr color={configuration.colors.lines.separator101}/>
                                     <table style={{"width":"100%"}}>
                                         <tr> 
-                                            <td style={{"width":"15%", "padding-left": "0em"}}>  
-                                                <Box variant="h4">Latency - Minimum</Box>
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
+                                                <Box variant="h4">Latency Minimum (ms)</Box>
                                             </td>
                                         </tr>
                                     </table>
+                                    <br/> 
                                     <table style={{"width":"100%"}}>
                                         <tr> 
-                                            <td style={{"width":"20%", "padding-left": "4em", "border-left": "5px solid " + configuration.colors.lines.separator101 }}>  
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
                                                     <CompMetric01 
                                                         value={ statMetrics[0][selectedOperationMetric['value']]['min_latency_ms'][statMetrics[0][selectedOperationMetric['value']]['min_latency_ms'].length-1] || 0}
-                                                        title={"Latency(ms)"}
+                                                        title={statMetrics[0]['name']}
                                                         precision={3}
                                                         format={1}
                                                         fontColorValue={configuration.colors.fonts.metric100}
                                                         fontSizeValue={"24px"}
                                                     />
                                             </td>
-                                            <td style={{"width":"80%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
+                                                    <CompMetric01 
+                                                        value={ statMetrics[1][selectedOperationMetric['value']]['min_latency_ms'][statMetrics[1][selectedOperationMetric['value']]['min_latency_ms'].length-1] || 0}
+                                                        title={statMetrics[1]['name']}
+                                                        precision={3}
+                                                        format={1}
+                                                        fontColorValue={configuration.colors.fonts.metric100}
+                                                        fontSizeValue={"24px"}
+                                                    />
+                                            </td>
+                                            <td style={{"width":"20%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
+                                                 <ChartDonut01 series={JSON.stringify([
+                                                                           (statMetrics[0][selectedOperationMetric['value']]['min_latency_ms'][statMetrics[0][selectedOperationMetric['value']]['min_latency_ms'].length-1] || 0) ,     
+                                                                           (statMetrics[1][selectedOperationMetric['value']]['min_latency_ms'][statMetrics[1][selectedOperationMetric['value']]['min_latency_ms'].length-1] || 0) ,     
+                                                                    ])} 
+                                                                    labels={JSON.stringify([statMetrics[0]['name'],statMetrics[1]['name']])}
+                                                                    height="280px" 
+                                                                    width="280px" 
+                                                />
+                                            </td>
+                                            <td style={{"width":"50%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
                                                 <ChartLine01 series={JSON.stringify([
-                                                                            { name : statMetrics[0]['name'], data :  statMetrics[0][selectedOperationMetric['value']]['min_latency_ms'] }
+                                                                            { name : statMetrics[0]['name'], data :  statMetrics[0][selectedOperationMetric['value']]['min_latency_ms'] },
+                                                                            { name : statMetrics[1]['name'],data :  statMetrics[1][selectedOperationMetric['value']]['min_latency_ms'] }
                                                                             
                                                                     ])} 
-                                                title={"Latency(ms)"} height="180px" />
+                                                title={"Latency (ms)"} height="180px" />
                                             </td>
                                         </tr>
-                                    </table>         
+                                    </table>
+                                    
                                     
                                     <br/>
                                     <hr color={configuration.colors.lines.separator101}/>
                                     <table style={{"width":"100%"}}>
                                         <tr> 
-                                            <td style={{"width":"15%", "padding-left": "0em"}}>  
-                                                <Box variant="h4">Latency - p50</Box>
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
+                                                <Box variant="h4">Latency Maximum (ms)</Box>
                                             </td>
                                         </tr>
                                     </table>
+                                    <br/> 
                                     <table style={{"width":"100%"}}>
                                         <tr> 
-                                            <td style={{"width":"20%", "padding-left": "4em", "border-left": "5px solid " + configuration.colors.lines.separator101 }}>  
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
+                                                    <CompMetric01 
+                                                        value={ statMetrics[0][selectedOperationMetric['value']]['max_latency_ms'][statMetrics[0][selectedOperationMetric['value']]['max_latency_ms'].length-1] || 0}
+                                                        title={statMetrics[0]['name']}
+                                                        precision={3}
+                                                        format={1}
+                                                        fontColorValue={configuration.colors.fonts.metric100}
+                                                        fontSizeValue={"24px"}
+                                                    />
+                                            </td>
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
+                                                    <CompMetric01 
+                                                        value={ statMetrics[1][selectedOperationMetric['value']]['max_latency_ms'][statMetrics[1][selectedOperationMetric['value']]['max_latency_ms'].length-1] || 0}
+                                                        title={statMetrics[1]['name']}
+                                                        precision={3}
+                                                        format={1}
+                                                        fontColorValue={configuration.colors.fonts.metric100}
+                                                        fontSizeValue={"24px"}
+                                                    />
+                                            </td>
+                                            <td style={{"width":"20%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
+                                                 <ChartDonut01 series={JSON.stringify([
+                                                                           (statMetrics[0][selectedOperationMetric['value']]['max_latency_ms'][statMetrics[0][selectedOperationMetric['value']]['max_latency_ms'].length-1] || 0) ,     
+                                                                           (statMetrics[1][selectedOperationMetric['value']]['max_latency_ms'][statMetrics[1][selectedOperationMetric['value']]['max_latency_ms'].length-1] || 0) ,     
+                                                                    ])} 
+                                                                    labels={JSON.stringify([statMetrics[0]['name'],statMetrics[1]['name']])}
+                                                                    height="280px" 
+                                                                    width="280px" 
+                                                />
+                                            </td>
+                                            <td style={{"width":"50%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
+                                                <ChartLine01 series={JSON.stringify([
+                                                                            { name : statMetrics[0]['name'], data :  statMetrics[0][selectedOperationMetric['value']]['max_latency_ms'] },
+                                                                            { name : statMetrics[1]['name'],data :  statMetrics[1][selectedOperationMetric['value']]['max_latency_ms'] }
+                                                                            
+                                                                    ])} 
+                                                title={"Latency (ms)"} height="180px" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    
+                                    
+                                    
+                                    <br/>
+                                    <hr color={configuration.colors.lines.separator101}/>
+                                    <table style={{"width":"100%"}}>
+                                        <tr> 
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
+                                                <Box variant="h4">Latency P50 (ms)</Box>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <br/> 
+                                    <table style={{"width":"100%"}}>
+                                        <tr> 
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
                                                     <CompMetric01 
                                                         value={ statMetrics[0][selectedOperationMetric['value']]['p50_latency_ms'][statMetrics[0][selectedOperationMetric['value']]['p50_latency_ms'].length-1] || 0}
-                                                        title={"Latency(ms)"}
+                                                        title={statMetrics[0]['name']}
                                                         precision={3}
                                                         format={1}
                                                         fontColorValue={configuration.colors.fonts.metric100}
                                                         fontSizeValue={"24px"}
                                                     />
                                             </td>
-                                            <td style={{"width":"80%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
+                                                    <CompMetric01 
+                                                        value={ statMetrics[1][selectedOperationMetric['value']]['p50_latency_ms'][statMetrics[1][selectedOperationMetric['value']]['p50_latency_ms'].length-1] || 0}
+                                                        title={statMetrics[1]['name']}
+                                                        precision={3}
+                                                        format={1}
+                                                        fontColorValue={configuration.colors.fonts.metric100}
+                                                        fontSizeValue={"24px"}
+                                                    />
+                                            </td>
+                                            <td style={{"width":"20%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
+                                                 <ChartDonut01 series={JSON.stringify([
+                                                                           (statMetrics[0][selectedOperationMetric['value']]['p50_latency_ms'][statMetrics[0][selectedOperationMetric['value']]['p50_latency_ms'].length-1] || 0) ,     
+                                                                           (statMetrics[1][selectedOperationMetric['value']]['p50_latency_ms'][statMetrics[1][selectedOperationMetric['value']]['p50_latency_ms'].length-1] || 0) ,     
+                                                                    ])} 
+                                                                    labels={JSON.stringify([statMetrics[0]['name'],statMetrics[1]['name']])}
+                                                                    height="280px" 
+                                                                    width="280px" 
+                                                />
+                                            </td>
+                                            <td style={{"width":"50%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
                                                 <ChartLine01 series={JSON.stringify([
-                                                                            { name : statMetrics[0]['name'], data :  statMetrics[0][selectedOperationMetric['value']]['p50_latency_ms'] }
+                                                                            { name : statMetrics[0]['name'], data :  statMetrics[0][selectedOperationMetric['value']]['p50_latency_ms'] },
+                                                                            { name : statMetrics[1]['name'],data :  statMetrics[1][selectedOperationMetric['value']]['p50_latency_ms'] }
                                                                             
                                                                     ])} 
-                                                title={"Latency(ms)"} height="180px" />
+                                                title={"Latency (ms)"} height="180px" />
                                             </td>
                                         </tr>
-                                    </table>         
+                                    </table> 
+                                    
+                                    
                                     
                                     <br/>
                                     <hr color={configuration.colors.lines.separator101}/>
                                     <table style={{"width":"100%"}}>
                                         <tr> 
-                                            <td style={{"width":"15%", "padding-left": "0em"}}>  
-                                                <Box variant="h4">Latency - P95</Box>
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
+                                                <Box variant="h4">Latency P95 (ms)</Box>
                                             </td>
                                         </tr>
                                     </table>
+                                    <br/> 
                                     <table style={{"width":"100%"}}>
                                         <tr> 
-                                            <td style={{"width":"20%", "padding-left": "4em", "border-left": "5px solid " + configuration.colors.lines.separator101 }}>  
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
                                                     <CompMetric01 
                                                         value={ statMetrics[0][selectedOperationMetric['value']]['p95_latency_ms'][statMetrics[0][selectedOperationMetric['value']]['p95_latency_ms'].length-1] || 0}
-                                                        title={"Latency(ms)"}
+                                                        title={statMetrics[0]['name']}
                                                         precision={3}
                                                         format={1}
                                                         fontColorValue={configuration.colors.fonts.metric100}
                                                         fontSizeValue={"24px"}
                                                     />
                                             </td>
-                                            <td style={{"width":"80%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
+                                                    <CompMetric01 
+                                                        value={ statMetrics[1][selectedOperationMetric['value']]['p95_latency_ms'][statMetrics[1][selectedOperationMetric['value']]['p95_latency_ms'].length-1] || 0}
+                                                        title={statMetrics[1]['name']}
+                                                        precision={3}
+                                                        format={1}
+                                                        fontColorValue={configuration.colors.fonts.metric100}
+                                                        fontSizeValue={"24px"}
+                                                    />
+                                            </td>
+                                            <td style={{"width":"20%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
+                                                 <ChartDonut01 series={JSON.stringify([
+                                                                           (statMetrics[0][selectedOperationMetric['value']]['p95_latency_ms'][statMetrics[0][selectedOperationMetric['value']]['p95_latency_ms'].length-1] || 0) ,     
+                                                                           (statMetrics[1][selectedOperationMetric['value']]['p95_latency_ms'][statMetrics[1][selectedOperationMetric['value']]['p95_latency_ms'].length-1] || 0) ,     
+                                                                    ])} 
+                                                                    labels={JSON.stringify([statMetrics[0]['name'],statMetrics[1]['name']])}
+                                                                    height="280px" 
+                                                                    width="280px" 
+                                                />
+                                            </td>
+                                            <td style={{"width":"50%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
                                                 <ChartLine01 series={JSON.stringify([
-                                                                            { name : statMetrics[0]['name'], data :  statMetrics[0][selectedOperationMetric['value']]['p95_latency_ms'] }
+                                                                            { name : statMetrics[0]['name'], data :  statMetrics[0][selectedOperationMetric['value']]['p95_latency_ms'] },
+                                                                            { name : statMetrics[1]['name'],data :  statMetrics[1][selectedOperationMetric['value']]['p95_latency_ms'] }
                                                                             
                                                                     ])} 
-                                                title={"Latency(ms)"} height="180px" />
+                                                title={"Latency (ms)"} height="180px" />
                                             </td>
                                         </tr>
-                                    </table>         
+                                    </table> 
+                                    
                                     
                                     <br/>
                                     <hr color={configuration.colors.lines.separator101}/>
                                     <table style={{"width":"100%"}}>
                                         <tr> 
-                                            <td style={{"width":"15%", "padding-left": "0em"}}>  
-                                                <Box variant="h4">Latency - P99</Box>
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
+                                                <Box variant="h4">Latency P99 (ms)</Box>
                                             </td>
                                         </tr>
                                     </table>
+                                    <br/> 
                                     <table style={{"width":"100%"}}>
                                         <tr> 
-                                            <td style={{"width":"20%", "padding-left": "4em", "border-left": "5px solid " + configuration.colors.lines.separator101 }}>  
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
                                                     <CompMetric01 
                                                         value={ statMetrics[0][selectedOperationMetric['value']]['p99_latency_ms'][statMetrics[0][selectedOperationMetric['value']]['p99_latency_ms'].length-1] || 0}
-                                                        title={"Latency(ms)"}
+                                                        title={statMetrics[0]['name']}
                                                         precision={3}
                                                         format={1}
                                                         fontColorValue={configuration.colors.fonts.metric100}
                                                         fontSizeValue={"24px"}
                                                     />
                                             </td>
-                                            <td style={{"width":"80%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
+                                            <td style={{"width":"15%", "padding-left": "1em"}}>  
+                                                    <CompMetric01 
+                                                        value={ statMetrics[1][selectedOperationMetric['value']]['p99_latency_ms'][statMetrics[1][selectedOperationMetric['value']]['p99_latency_ms'].length-1] || 0}
+                                                        title={statMetrics[1]['name']}
+                                                        precision={3}
+                                                        format={1}
+                                                        fontColorValue={configuration.colors.fonts.metric100}
+                                                        fontSizeValue={"24px"}
+                                                    />
+                                            </td>
+                                            <td style={{"width":"20%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
+                                                 <ChartDonut01 series={JSON.stringify([
+                                                                           (statMetrics[0][selectedOperationMetric['value']]['p99_latency_ms'][statMetrics[0][selectedOperationMetric['value']]['p99_latency_ms'].length-1] || 0) ,     
+                                                                           (statMetrics[1][selectedOperationMetric['value']]['p99_latency_ms'][statMetrics[1][selectedOperationMetric['value']]['p99_latency_ms'].length-1] || 0) ,     
+                                                                    ])} 
+                                                                    labels={JSON.stringify([statMetrics[0]['name'],statMetrics[1]['name']])}
+                                                                    height="280px" 
+                                                                    width="280px" 
+                                                />
+                                            </td>
+                                            <td style={{"width":"50%", "border-left": "1px solid " + configuration.colors.lines.separator101, "padding-left": "1em"}}>  
                                                 <ChartLine01 series={JSON.stringify([
-                                                                            { name : statMetrics[0]['name'], data :  statMetrics[0][selectedOperationMetric['value']]['p99_latency_ms'] }
+                                                                            { name : statMetrics[0]['name'], data :  statMetrics[0][selectedOperationMetric['value']]['p99_latency_ms'] },
+                                                                            { name : statMetrics[1]['name'],data :  statMetrics[1][selectedOperationMetric['value']]['p99_latency_ms'] }
                                                                             
                                                                     ])} 
-                                                title={"Latency(ms)"} height="180px" />
+                                                title={"Latency (ms)"} height="180px" />
                                             </td>
                                         </tr>
-                                    </table>         
+                                    </table> 
                                     
                                     
                                 </Container>
                             
+                                
+                                
                                 <br/>
                                 
          

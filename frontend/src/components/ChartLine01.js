@@ -1,8 +1,8 @@
-import {useState,useEffect,useRef} from 'react';
+import {memo} from 'react';
 import Chart from 'react-apexcharts';
 
-function ChartLine({series,history, height, width="100%", title, colors=[], border=2, timestamp}) {
-
+const ChartLine = memo(({ series, height, width="100%", title, border=2, timestamp}) => {
+    
     var options = {
               chart: {
                 height: height,
@@ -40,7 +40,6 @@ function ChartLine({series,history, height, width="100%", title, colors=[], bord
               dataLabels: {
                 enabled: false
               },
-              colors: colors,
               stroke: {
                 curve: 'straight',
                  width: border
@@ -126,9 +125,9 @@ function ChartLine({series,history, height, width="100%", title, colors=[], bord
     
     return (
             <div>
-                <Chart options={options} series={series} type="line" width={width} height={height} />
+                <Chart options={options} series={JSON.parse(series)} type="line" width={width} height={height} />
             </div>
            );
-}
+});
 
 export default ChartLine;
