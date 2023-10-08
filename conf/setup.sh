@@ -1,5 +1,5 @@
 #Verify code version
-version="$(curl https://version.code.ds.wwcs.aws.dev/?codeId=imwcp'&'moduleId=deploy)"
+version="$(curl https://version.code.ds.wwcs.aws.dev/?codeId=dbwcmp'&'moduleId=deploy)"
 
 #Install Software Packages
 sudo yum install -y openssl

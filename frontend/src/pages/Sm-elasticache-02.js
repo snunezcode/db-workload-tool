@@ -2,6 +2,9 @@ import {useState,useEffect,useRef} from 'react'
 import Axios from 'axios'
 import { configuration } from './Configs';
 
+import { applicationVersionUpdate } from '../components/Functions';
+import Flashbar from "@cloudscape-design/components/flashbar";
+
 import ColumnLayout from "@awsui/components-react/column-layout";
 import FormField from "@awsui/components-react/form-field";
 import Input from "@awsui/components-react/input";
@@ -28,6 +31,10 @@ import '@aws-amplify/ui-react/styles.css';
 
 function Application() {
 
+    //-- Application Version
+    const [versionMessage, setVersionMessage] = useState([]);
+  
+  
     //-- Add Header Cognito Token
     Axios.defaults.headers.common['x-csrf-token'] = sessionStorage.getItem("x-csrf-token");
     Axios.defaults.headers.common['x-token-cognito'] = sessionStorage.getItem("x-token-cognito");
@@ -420,6 +427,34 @@ function Application() {
     }
     
     
+    //-- Call API to App Version
+   async function gatherVersion (){
+
+        //-- Application Update
+        var appVersionObject = await applicationVersionUpdate({ codeId : "dbwcmp", moduleId: "elastic-m2"} );
+        
+        if (appVersionObject.release > configuration["apps-settings"]["release"] ){
+          setVersionMessage([
+                              {
+                                type: "info",
+                                content: "New Application version is available, new features and modules will improve workload capabilities and user experience.",
+                                dismissible: true,
+                                dismissLabel: "Dismiss message",
+                                onDismiss: () => setVersionMessage([]),
+                                id: "message_1"
+                              }
+          ]);
+      
+        }
+        
+   }
+    
+    
+   useEffect(() => {
+        gatherVersion();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    
     
     useEffect(() => {
         gatherClusters();
@@ -440,7 +475,8 @@ function Application() {
             content={
                 
                 <>
-                <br />
+                                <Flashbar items={versionMessage} />
+                                <br />
                                 <Container
                                     header={
                                         <Header

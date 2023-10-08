@@ -1,7 +1,7 @@
 import {useState,useEffect} from 'react'
 
-import { SideMainLayoutHeader,SideMainLayoutMenu, breadCrumbs } from './Configs';
-
+import { applicationVersionUpdate } from '../components/Functions';
+import Flashbar from "@cloudscape-design/components/flashbar";
 import CustomHeader from "../components/Header";
 import ContentLayout from '@awsui/components-react/content-layout';
 import { configuration } from './Configs';
@@ -18,6 +18,38 @@ import '@aws-amplify/ui-react/styles.css';
 
 function Home() {
   
+  //-- Application Version
+  const [versionMessage, setVersionMessage] = useState([]);
+  
+  
+  //-- Call API to App Version
+   async function gatherVersion (){
+
+        //-- Application Update
+        var appVersionObject = await applicationVersionUpdate({ codeId : "dbwcmp", moduleId: "home"} );
+        
+        if (appVersionObject.release > configuration["apps-settings"]["release"] ){
+          setVersionMessage([
+                              {
+                                type: "info",
+                                content: "New Application version is available, new features and modules will improve workload capabilities and user experience.",
+                                dismissible: true,
+                                dismissLabel: "Dismiss message",
+                                onDismiss: () => setVersionMessage([]),
+                                id: "message_1"
+                              }
+          ]);
+      
+        }
+        
+   }
+   
+   
+   useEffect(() => {
+        gatherVersion();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+  
   return (
       
     <div>
@@ -29,6 +61,8 @@ function Home() {
             <ContentLayout 
                     header = {
                              <>
+                                <Flashbar items={versionMessage} />
+                                <br/>
                                 <Header variant="h1">
                                             Welcome to {configuration["apps-settings"]["application-title"]}
                                 </Header>

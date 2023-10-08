@@ -18,6 +18,7 @@ export const configuration =
         "release" : "0.1.0",
         "application-title": " Real-time Database Workload Solution",
         "socket-url": wsProtocol + "://" + domain + ":3003",
+        "version-code-url" : "https://version.code.ds.wwcs.aws.dev/",
     },
     "colors": {
         "fonts" : {
